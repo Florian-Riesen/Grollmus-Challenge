@@ -27,15 +27,15 @@ namespace TiaFileViewer.UserControls
 
         private void ScrollLeft_Click(object sender, RoutedEventArgs e)
         {
-            //NodeScrollViewer.LineLeft();
-            //NodeScrollViewer.LineLeft();
-            //NodeScrollViewer.LineLeft();
+            NodeScrollViewer.LineLeft();
+            NodeScrollViewer.LineLeft();
+            NodeScrollViewer.LineLeft();
         }
         private void ScrollRight_Click(object sender, RoutedEventArgs e)
         {
-            //NodeScrollViewer.LineRight();
-            //NodeScrollViewer.LineRight();
-            //NodeScrollViewer.LineRight();
+            NodeScrollViewer.LineRight();
+            NodeScrollViewer.LineRight();
+            NodeScrollViewer.LineRight();
         }
     }
 }

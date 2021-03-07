@@ -18,16 +18,46 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
-
-        <custom:Carousel></custom:Carousel>
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Background="White">
+        <custom:Carousel Grid.Row="0"/>
+        <Rectangle Grid.Row="1" Fill="Black" Height="2"/>
+        <ListView Grid.Row="2" ItemsSource="{Binding NamedProperties}">
+            <!--<ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Margin" Value="10"/>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>-->
+            <!--<ItemsC--><!--ontrol.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="1"></UniformGrid>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>-->
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Margin="7" TextAlignment="Center">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0}   | Eigenschaften: {1}">
+                                <Binding Path="Key"/>
+                                <Binding Path="Value"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ListView>
+        <Rectangle Grid.Row="3" Fill="Black" Height="2"/>
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Background="White">
             <Button Command="{Binding LoadFileCommand}">
                 <Image Source="../Icons/FileOpen.png"/>
             </Button>
-            <Rectangle Fill="Black" Margin="5" Width="2"/>
+            <Rectangle Fill="Black" Width="2"/>
             <Button >
                 <Image Source="../Icons/Settings.png"/>
             </Button>

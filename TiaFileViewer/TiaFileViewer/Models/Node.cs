@@ -13,23 +13,36 @@ namespace TiaFileViewer.Models
     {
         public string NodeType { get; set; }
 
-        public IEnumerable<KeyValuePair<string, string>> Properties { get; set; }
+        public Dictionary<string, string> Properties { get; set; }
 
         public static IEnumerable<Node> FromTiaFile(string filePath)
         {
             var doc = XDocument.Load(filePath);
             var nodes = doc.Descendants("node").Where(x => x.Attribute("Type") != null); 
-            var edges = doc.Descendants("edge").Where(x => x.Attribute("Type") != null);
-            var both = nodes.Concat(edges);
-            
-            return nodes.Concat(edges).Select(x => new Node
+            return nodes.Select(x => new Node
             {
                 NodeType = x.Attribute("Type").Value,
                 Properties = x.Element("properties").Elements("property")
                     .Select(p => new KeyValuePair<string, string>(
                         p.Element("key").Value, 
                         p.Element("value").Value))
+                        .ToDictionary(k => k.Key, v => v.Value)
             });
+        }
+
+        public static Dictionary<string, int> SummarizeProperties(IEnumerable<Node> nodes)
+        {
+            var dict = new Dictionary<string, int>();
+            foreach(var node in nodes)
+            {
+                var label = node.Properties.ContainsKey("Name") ? node.Properties["Name"]
+                    : node.Properties.ContainsKey("Id") ? node.Properties["Id"] : null;
+                if (dict.ContainsKey(label))
+                    dict[label]++;
+                else
+                    dict.Add(label, 1);
+            }
+            return dict;
         }
     }
     

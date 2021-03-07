@@ -20,10 +20,32 @@ namespace TiaFileViewer
     {
         private IEnumerable<Node> _nodes;
         private ObservableCollection<Tuple<string, int>> _types = new ObservableCollection<Tuple<string, int>>();
+        private Tuple<string, int> _selectedType;
+        private Dictionary<string, int> _namedProperties;
 
         public DelegateCommand LoadFileCommand { get; private set; }
-        
 
+        public Tuple<string, int> SelectedType
+        {
+            get => _selectedType;
+            set
+            {
+                SetProperty(ref _selectedType, value);
+                if (value == null)
+                    NamedProperties = null;
+                else
+                    NamedProperties = Node.SummarizeProperties(Nodes.Where(x => x.NodeType == value.Item1));
+            }
+        }
+
+        public Dictionary<string, int> NamedProperties
+        {
+            get => _namedProperties;
+            set
+            {
+                SetProperty(ref _namedProperties, value);
+            }
+        }
         public ObservableCollection<Tuple<string, int>> Types
         {
             get => _types;
@@ -32,7 +54,6 @@ namespace TiaFileViewer
                 SetProperty(ref _types, value);
             }
         }
-
 
         public IEnumerable<Node> Nodes
         {

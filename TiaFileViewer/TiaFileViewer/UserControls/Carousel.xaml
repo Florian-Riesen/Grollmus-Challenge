@@ -25,25 +25,25 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <RepeatButton Grid.Column="0" Content="&lt;" Style="{StaticResource ScrollButton}" Click="ScrollLeft_Click" ></RepeatButton>
-        <ScrollViewer x:Name="NodeScrollViewer" Grid.Column="1" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled">
-            <ListView ItemsSource="{Binding Types}" BorderThickness="0">
+        <ScrollViewer x:Name="NodeScrollViewer" Grid.Column="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
+            <ListView ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}" BorderThickness="0">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="BorderThickness" Value="0"/>
                         <Setter Property="Margin" Value="10"/>
                         <Setter Property="Padding" Value="0"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     </Style>
                 </ListView.ItemContainerStyle>
-
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" ></StackPanel>
+                        <UniformGrid Rows="1"></UniformGrid>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="Black" BorderThickness="1">
-                            <TextBlock Margin="7" Width="130" TextAlignment="Center">
+                        <Border BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Center" BorderThickness="1">
+                            <TextBlock Margin="7" TextAlignment="Center">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}{0} ({1})">
                                         <Binding Path="Item1"/>
@@ -56,6 +56,6 @@
                 </ItemsControl.ItemTemplate>
             </ListView>
         </ScrollViewer>
-        <RepeatButton Grid.Column="2" Content="&gt;" Style="{StaticResource ScrollButton}" Click="ScrollRight_Click"></RepeatButton>
+            <RepeatButton Grid.Column="2" Content="&gt;" Style="{StaticResource ScrollButton}" Click="ScrollRight_Click"></RepeatButton>
     </Grid>
 </UserControl>
