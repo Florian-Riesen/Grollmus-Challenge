@@ -7,7 +7,8 @@
         xmlns:custom="clr-namespace:TiaFileViewer.UserControls"
         mc:Ignorable="d"
         DataContext="../ViewModels/MainWindowViewModel"
-        Title="MainWindow" Height="450" Width="800">
+        Title="{Binding WindowTitle}" Height="450" Width="800"
+        MinHeight="300" MinWidth="400">
 
     <Window.Resources>
         <Style TargetType="Button">
@@ -26,29 +27,35 @@
         <custom:Carousel Grid.Row="0"/>
         <Rectangle Grid.Row="1" Fill="Black" Height="2"/>
         <ListView Grid.Row="2" ItemsSource="{Binding NamedProperties}">
-            <!--<ListView.ItemContainerStyle>
+            <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="Margin" Value="10"/>
+                    <Setter Property="Margin" Value="0"/>
                     <Setter Property="Padding" Value="0"/>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>
-            </ListView.ItemContainerStyle>-->
-            <!--<ItemsC--><!--ontrol.ItemsPanel>
+            </ListView.ItemContainerStyle>
+            <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="1"></UniformGrid>
+                    <UniformGrid Columns="1" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0"></UniformGrid>
                 </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>-->
+            </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Margin="7" TextAlignment="Center">
-                        <TextBlock.Text>
-                            <MultiBinding StringFormat="{}{0}   | Eigenschaften: {1}">
-                                <Binding Path="Key"/>
-                                <Binding Path="Value"/>
-                            </MultiBinding>
-                        </TextBlock.Text>
-                    </TextBlock>
+                    <Grid HorizontalAlignment="Stretch" Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock TextAlignment="Left" Text="{Binding Key}" MinWidth="100"/>
+                        <TextBlock Grid.Column="1" HorizontalAlignment="Right" >
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{} | Eigenschaften: {0}">
+                                    <Binding Path="Value"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ListView>
@@ -57,7 +64,7 @@
             <Button Command="{Binding LoadFileCommand}">
                 <Image Source="../Icons/FileOpen.png"/>
             </Button>
-            <Rectangle Fill="Black" Width="2"/>
+            <Rectangle Fill="Black" Margin="5,0" Width="2"/>
             <Button >
                 <Image Source="../Icons/Settings.png"/>
             </Button>

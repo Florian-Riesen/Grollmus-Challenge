@@ -22,8 +22,15 @@ namespace TiaFileViewer
         private ObservableCollection<Tuple<string, int>> _types = new ObservableCollection<Tuple<string, int>>();
         private Tuple<string, int> _selectedType;
         private Dictionary<string, int> _namedProperties;
+        private string _windowTitle;
 
         public DelegateCommand LoadFileCommand { get; private set; }
+
+        public string WindowTitle
+        {
+            get => _windowTitle;
+            set => SetProperty(ref _windowTitle, value);
+        }
 
         public Tuple<string, int> SelectedType
         {
@@ -71,6 +78,7 @@ namespace TiaFileViewer
         public MainWindowViewModel()
         {
             LoadFileCommand = new DelegateCommand(loadFile);
+            WindowTitle = "TIA Selection Tool - Datei-Viewer";
         }
 
         private void loadFile()
@@ -79,6 +87,8 @@ namespace TiaFileViewer
             dialog.Filter = "tia-Dateien|*.tia";
             if (dialog.ShowDialog() == true)
                 Nodes = Node.FromTiaFile(dialog.FileName);
+            var shortName = new FileInfo(dialog.FileName).Name;
+            WindowTitle = "TIA Selection Tool - Datei-Viewer - \"" + shortName + "\"";
         }
 
         
