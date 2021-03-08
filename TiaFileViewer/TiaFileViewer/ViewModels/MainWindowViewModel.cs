@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
 using System.IO;
 using Microsoft.Win32;
 using TiaFileViewer.Models;
@@ -24,8 +19,6 @@ namespace TiaFileViewer
         private Dictionary<string, int> _namedProperties;
         private string _windowTitle;
 
-        public DelegateCommand LoadFileCommand { get; private set; }
-
         public string WindowTitle
         {
             get => _windowTitle;
@@ -41,7 +34,7 @@ namespace TiaFileViewer
                 if (value == null)
                     NamedProperties = null;
                 else
-                    NamedProperties = Node.SummarizeProperties(Nodes.Where(x => x.NodeType == value.Item1));
+                    NamedProperties = Node.SummarizeProperties(AllNodes.Where(x => x.NodeType == value.Item1));
             }
         }
 
@@ -62,18 +55,25 @@ namespace TiaFileViewer
             }
         }
 
-        public IEnumerable<Node> Nodes
+        public IEnumerable<Node> AllNodes
         {
-            get => _nodes;
+            get => AllNodes;
             set
             {
-                SetProperty(ref _nodes, value);
+                AllNodes = value ?? new List<Node>();
+                if (value == null)
+                    return;
                 var types = value.Select(x => x.NodeType).Distinct();
                 Types.Clear();
-                Types.AddRange(types.Select(x => new Tuple<string, int>(x, value.Count(y => y.NodeType == x))));
+                Types.AddRange(types.Select(x => 
+                    new Tuple<string, int>(
+                        x, 
+                        value.Count(y => y.NodeType == x))));
             }
         }
-        
+
+        public DelegateCommand LoadFileCommand { get; private set; }
+
 
         public MainWindowViewModel()
         {
@@ -86,11 +86,9 @@ namespace TiaFileViewer
             var dialog = new OpenFileDialog();
             dialog.Filter = "tia-Dateien|*.tia";
             if (dialog.ShowDialog() == true)
-                Nodes = Node.FromTiaFile(dialog.FileName);
+                AllNodes = Node.FromTiaFile(dialog.FileName);
             var shortName = new FileInfo(dialog.FileName).Name;
             WindowTitle = "TIA Selection Tool - Datei-Viewer - \"" + shortName + "\"";
         }
-
-        
     }
 }
