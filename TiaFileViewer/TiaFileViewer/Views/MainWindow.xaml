@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:TiaFileViewer.Views"
         xmlns:custom="clr-namespace:TiaFileViewer.UserControls"
         mc:Ignorable="d"
-        DataContext="../ViewModels/MainWindowViewModel"
         Title="{Binding WindowTitle}" Height="450" Width="800"
         MinHeight="300" MinWidth="400">
 
@@ -25,7 +24,6 @@
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
         <custom:Carousel Grid.Row="0"/>
-        <Rectangle Grid.Row="1" Fill="Black" Height="2"/>
         <ListView Grid.Row="2" ItemsSource="{Binding NamedProperties}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
@@ -59,12 +57,11 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ListView>
-        <Rectangle Grid.Row="3" Fill="Black" Height="2"/>
-        <StackPanel Grid.Row="4" Orientation="Horizontal" Background="White">
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Background="CadetBlue">
             <Button Command="{Binding LoadFileCommand}">
                 <Image Source="../Icons/FileOpen.png"/>
             </Button>
-            <Rectangle Fill="Black" Margin="5,0" Width="2"/>
+            <Rectangle Fill="Black" Margin="5" Width="2"/>
             <Button >
                 <Image Source="../Icons/Settings.png"/>
             </Button>
@@ -74,6 +71,11 @@
             <Button >
                 <Image Source="../Icons/CsvExport.png"/>
             </Button>
+            <TextBlock Margin="10,5">Zusammenfassung der Properties:</TextBlock>
+            <StackPanel Margin="5">
+                <RadioButton IsChecked="{Binding UseAllPropertiesForSummarization}" Margin="0,0,0,5">Alle</RadioButton>
+                <RadioButton>Nur Name/Id</RadioButton>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

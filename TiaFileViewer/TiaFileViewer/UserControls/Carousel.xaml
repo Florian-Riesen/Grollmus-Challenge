@@ -18,32 +18,34 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid Grid.Row="0">
+    <Grid Grid.Row="0" Background="CadetBlue">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <RepeatButton Grid.Column="0" Content="&lt;" Style="{StaticResource ScrollButton}" Click="ScrollLeft_Click" ></RepeatButton>
+        <RepeatButton Grid.Column="0" Content="&lt;" Foreground="LightBlue" Style="{StaticResource ScrollButton}" Click="ScrollLeft_Click" ></RepeatButton>
         <ScrollViewer x:Name="NodeScrollViewer" Grid.Column="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
-            <ListView ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}" BorderThickness="0">
+            <ListView ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}" BorderThickness="0" Background="Transparent">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="BorderThickness" Value="0"/>
                         <Setter Property="Margin" Value="10"/>
                         <Setter Property="Padding" Value="0"/>
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Background" Value="White"/>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="1"></UniformGrid>
+                        <UniformGrid Rows="1" Background="Transparent"></UniformGrid>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="Black" HorizontalAlignment="Stretch" VerticalAlignment="Center" BorderThickness="1">
-                            <TextBlock Margin="7" TextAlignment="Center">
+                        <Grid>
+                            <Grid Background="White" Opacity="0.6"/>
+                            <TextBlock Margin="7" TextAlignment="Center" >
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}{0} ({1})">
                                         <Binding Path="Item1"/>
@@ -51,11 +53,11 @@
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
-                        </Border>
+                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ListView>
         </ScrollViewer>
-            <RepeatButton Grid.Column="2" Content="&gt;" Style="{StaticResource ScrollButton}" Click="ScrollRight_Click"></RepeatButton>
+        <RepeatButton Grid.Column="2" Content="&gt;" Foreground="LightBlue" Style="{StaticResource ScrollButton}" Click="ScrollRight_Click"></RepeatButton>
     </Grid>
 </UserControl>

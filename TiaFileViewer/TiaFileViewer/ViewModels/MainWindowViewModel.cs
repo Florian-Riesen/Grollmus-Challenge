@@ -9,20 +9,31 @@ using Prism.Mvvm;
 using Prism.Commands;
 
 
-namespace TiaFileViewer
+namespace TiaFileViewer.ViewModels
 {
     class MainWindowViewModel : BindableBase
     {
-        private IEnumerable<Node> _nodes;
+        private IEnumerable<Node> _allNodes;
         private ObservableCollection<Tuple<string, int>> _types = new ObservableCollection<Tuple<string, int>>();
         private Tuple<string, int> _selectedType;
         private Dictionary<string, int> _namedProperties;
         private string _windowTitle;
+        private bool _useAllPropertiesForSummarization;
 
         public string WindowTitle
         {
             get => _windowTitle;
             set => SetProperty(ref _windowTitle, value);
+        }
+
+        public bool UseAllPropertiesForSummarization
+        {
+            get => _useAllPropertiesForSummarization;
+            set
+            {
+                SetProperty(ref _useAllPropertiesForSummarization, value);
+                SelectedType = SelectedType; // trigger a refresh of all properties when the radiobutton choice changed
+            }
         }
 
         public Tuple<string, int> SelectedType
@@ -32,9 +43,9 @@ namespace TiaFileViewer
             {
                 SetProperty(ref _selectedType, value);
                 if (value == null)
-                    NamedProperties = null;
+                    return;
                 else
-                    NamedProperties = Node.SummarizeProperties(AllNodes.Where(x => x.NodeType == value.Item1));
+                    NamedProperties = Node.SummarizeProperties(AllNodes.Where(x => x.NodeType == value.Item1), UseAllPropertiesForSummarization);
             }
         }
 
@@ -57,10 +68,10 @@ namespace TiaFileViewer
 
         public IEnumerable<Node> AllNodes
         {
-            get => AllNodes;
+            get => _allNodes;
             set
             {
-                AllNodes = value ?? new List<Node>();
+                _allNodes = value ?? new List<Node>();
                 if (value == null)
                     return;
                 var types = value.Select(x => x.NodeType).Distinct();
@@ -79,6 +90,7 @@ namespace TiaFileViewer
         {
             LoadFileCommand = new DelegateCommand(loadFile);
             WindowTitle = "TIA Selection Tool - Datei-Viewer";
+            UseAllPropertiesForSummarization = true;
         }
 
         private void loadFile()
@@ -86,9 +98,11 @@ namespace TiaFileViewer
             var dialog = new OpenFileDialog();
             dialog.Filter = "tia-Dateien|*.tia";
             if (dialog.ShowDialog() == true)
-                AllNodes = Node.FromTiaFile(dialog.FileName);
-            var shortName = new FileInfo(dialog.FileName).Name;
-            WindowTitle = "TIA Selection Tool - Datei-Viewer - \"" + shortName + "\"";
+            {
+                AllNodes = Node.FromTiaFile(dialog.FileName) ?? AllNodes;
+                var shortName = new FileInfo(dialog.FileName).Name;
+                WindowTitle = "TIA Selection Tool - Datei-Viewer - \"" + shortName + "\"";
+            }
         }
     }
 }

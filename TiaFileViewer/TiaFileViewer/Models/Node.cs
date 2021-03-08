@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Xml.Linq;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
 using System.Windows;
 
 namespace TiaFileViewer.Models
@@ -41,19 +37,38 @@ namespace TiaFileViewer.Models
             });
         }
 
-        public static Dictionary<string, int> SummarizeProperties(IEnumerable<Node> nodes)
+        public static Dictionary<string, int> SummarizeProperties(IEnumerable<Node> nodes, bool allPropertiesAlgorithm)
         {
-            var namedProperties = new Dictionary<string, int>();
-            foreach(var node in nodes)
+            // Hier war ich mir nicht sicher, wie die Properties zusammengezählt werden sollen - siehe meine Mail von Montag morgen.
+            // Ich habe die beiden möglichen Algorithmen eingebaut, die mir sinnvoll erschienen.
+            if (allPropertiesAlgorithm)
             {
-                var nameOrId = node.Properties.ContainsKey("Name") ? node.Properties["Name"]
-                    : node.Properties.ContainsKey("Id") ? node.Properties["Id"] : null;
-                if (namedProperties.ContainsKey(nameOrId))
-                    namedProperties[nameOrId]++;
-                else
-                    namedProperties.Add(nameOrId, 1);
+                var namedProperties = new Dictionary<string, int>();
+                foreach (var node in nodes)
+                {
+                    var nameOrId = node.Properties.ContainsKey("Name") ? node.Properties["Name"]
+                        : node.Properties.ContainsKey("Id") ? node.Properties["Id"] : null;
+                    if (namedProperties.ContainsKey(nameOrId))
+                        namedProperties[nameOrId] += node.Properties.Count;
+                    else
+                        namedProperties.Add(nameOrId, node.Properties.Count);
+                }
+                return namedProperties;
             }
-            return namedProperties;
+            else
+            {
+                var namedProperties = new Dictionary<string, int>();
+                foreach (var node in nodes)
+                {
+                    var nameOrId = node.Properties.ContainsKey("Name") ? node.Properties["Name"]
+                        : node.Properties.ContainsKey("Id") ? node.Properties["Id"] : null;
+                    if (namedProperties.ContainsKey(nameOrId))
+                        namedProperties[nameOrId]++;
+                    else
+                        namedProperties.Add(nameOrId, 1);
+                }
+                return namedProperties;
+            }
         }
     }
     
